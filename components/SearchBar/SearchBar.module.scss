@@ -1,0 +1,44 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+.bar {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 25px 0px 0px 25px;
+  outline: none;
+  width: 20vw;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 5px 5px 5px gray;
+}
+
+.bar:focus {
+  width: 40vw;
+  padding: 20px 30px;
+}
+
+.search {
+  padding: 10px 20px;
+  background: #c93739;
+  color: white;
+  font-weight: bold;
+  border-radius: 0px 25px 25px 0px;
+  cursor: pointer;
+  width: 20vw;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 5px 5px 5px gray;
+}
+
+.bar:focus + .search {
+  font-size: 20px;
+  width: 30vw;
+  padding: 20px 30px;
+}
+
+.bar_searchContainer {
+  display: flex;
+}

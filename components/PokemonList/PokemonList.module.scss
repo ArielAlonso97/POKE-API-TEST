@@ -1,0 +1,48 @@
+.main {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.list {
+  margin: 40px;
+  display: flex;
+  flex-wrap: wrap;
+
+  justify-content: space-around;
+}
+.paginado {
+  display: flex;
+  justify-content: center;
+}
+
+.pokecard {
+  width: 500px;
+}
+@keyframes rotateAnimation {
+  from {
+    transform: rotate(0deg); /* Iniciar la rotación desde 0 grados */
+  }
+  to {
+    transform: rotate(360deg); /* Rotar completamente 360 grados */
+  }
+}
+.pokeball_loading {
+  display: flex;
+  animation: rotateAnimation 5s linear infinite;
+  transform-origin: center;
+  justify-content: center;
+  align-items: center;
+  height: 800px;
+}
+
+.searchAgain{
+    background-color: rgba($color: #ffffff, $alpha: 0.8);
+    box-shadow: 0px 0px 5px gray;
+    display: flex;
+    justify-content: center;
+    padding: 30px;
+    margin: 20px;
+
+}

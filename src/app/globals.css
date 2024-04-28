@@ -1,4 +1,11 @@
 *{
+   
     margin: 0;
     padding: 0;
+}
+
+
+body{
+    background-image: url('../../public/Images/pokeball_bg_1.png');
+    background-size: contain;
 }

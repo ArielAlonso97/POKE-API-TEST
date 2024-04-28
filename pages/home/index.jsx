@@ -9,8 +9,8 @@ export default function HomePage() {
     <div className={style.main}>
       <div className={style.headbar}>
         <Headbar></Headbar>
-      </div>
-      <PokemonList></PokemonList>
+      </div >
+      <PokemonList className={style.pokelist}></PokemonList>
     </div>
   );
 }

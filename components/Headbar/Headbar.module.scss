@@ -1,5 +1,32 @@
-.main{
-height: 100px;
-background-color: white;
-box-shadow: 5px 5px 5px gray;
+@import url("https://fonts.cdnfonts.com/css/pokemon-solid");
+
+.main {
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  background-color: white;
+  box-shadow: 5px 5px 5px gray;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.top_right {
+  display: flex;
+  align-items: center;
+  font-family: "Pokemon Solid", sans-serif;
+}
+
+.pokeLogo {
+  margin-left: 10px;
+}
+.top_left > :first-child{
+  font-size: 2rem;
+  
+}
+
+
+.top_left > :last-child {
+  font-size: 1rem;
 }

@@ -1,12 +1,20 @@
-'use client'
+"use client";
 
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchPokemonList, fetchPokemonUrl } from "../../redux/actions/pokemonAction";
+import {
+  fetchPokemonList,
+  fetchPokemonUrl,
+} from "../../redux/actions/pokemonAction";
 import { Provider } from "react-redux";
 import store from "../../redux/store";
 import PokemonCard from "../PokemonCard/PokemonCard";
 import Paginado from "../Paginado/Paginado";
+import SearchBar from "../SearchBar/SearchBar";
+import style from "./PokemonList.module.scss";
+import Reset from "../Reset/Reset";
+import pokeball from "../../public/Images/pokebal.png"
+import Image from "next/image";
 
 function PokemonList() {
   const dispatch = useDispatch();
@@ -18,26 +26,28 @@ function PokemonList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Nuevo estado para controlar la carga
+  const [isLoading, setIsLoading] = useState(true);
 
   const itemsPerPage = 6;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage + 1;
 
   const currentPokemonListData = filter
-    ? filterPokemonListData.slice(startIndex, endIndex)
+    ? filterPokemonListData.slice(startIndex, endIndex - 1)
     : pokemonListData.slice(startIndex + 1, endIndex);
 
   const limit = 1025;
   const offset = startIndex;
 
+  //fetch api
   useEffect(() => {
-    setIsLoading(true); // Marcar como cargando al iniciar la carga de la lista
+    setIsLoading(true);
     dispatch(fetchPokemonList(limit, offset))
-      .then(() => setIsLoading(false)) // Cuando la carga finaliza, marcar como no cargando
-      .catch(() => setIsLoading(false)); // Manejar errores también
+      .then(() => setIsLoading(false))
+      .catch(() => setIsLoading(false));
   }, [dispatch, filter]);
 
+  //fetch pokemon details
   useEffect(() => {
     if (pokemonList.length > 0) {
       pokemonList.forEach((pokemon) => {
@@ -46,6 +56,7 @@ function PokemonList() {
     }
   }, [pokemonList, dispatch, filter]);
 
+  //guardando pokemons y detalles en variables
   useEffect(() => {
     const newPokemonListData = [...pokemonListData];
 
@@ -61,87 +72,95 @@ function PokemonList() {
       height: pokemonListUrl.height,
     };
 
-    if (!newPokemonListData.some((pokemon) => pokemon.name === newDataToAdd.name)) {
+    if (
+      !newPokemonListData.some((pokemon) => pokemon.name === newDataToAdd.name)
+    ) {
       newPokemonListData.push(newDataToAdd);
     }
 
     setPokemonListData(newPokemonListData);
   }, [pokemonListUrl, filter]);
 
+  //cambiar páginas
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
-  const handleSearchChange = (event) => {
-    setSearchTerm(event.target.value);
-  };
-
-  const handleSearch = () => {
-    setFilter(true);
-    setCurrentPage(1);
-    const filteredPokemonList = pokemonListData.filter((pokemon) => {
-      let types = [];
-      let id = 0;
-
-      if (pokemon.types && pokemon.types.length > 0) {
-        types = pokemon.types.map((typeData) => typeData.type.name);
-      }
-
-      if (pokemon.id) {
-        id = pokemon.id.toString();
-      }
-
-      return (
-        types.some((type) => type.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        (pokemon &&
-          pokemon.name &&
-          pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-        id.toString() === searchTerm.toString()
-      );
-    });
-    setFilterPokemonListData(filteredPokemonList);
-  };
-
-  const handleReset = () => {
-    setPokemonListData(pokemonListData);
-    setCurrentPage(1);
-    setSearchTerm("");
-    setFilter(false);
-  };
-
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return ( <div className={style.pokeball_loading}><Image src={pokeball} width={250}/></div> );
   }
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  return (
-    <>
-      <input
-        type="text"
-        placeholder="Buscar Pokémon..."
-        value={searchTerm}
-        onChange={handleSearchChange}
-      />
-      <button onClick={handleSearch}>Buscar</button>
-      {filter || currentPage>1 ? <button onClick={handleReset}>Reset</button>: null}
-      
+  if (filterPokemonListData.length === 0 && filter) {
+    return (
+      <div className={style.main}>
+        <SearchBar
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          filter={filter}
+          currentPage={currentPage}
+          setFilter={setFilter}
+          setCurrentPage={setCurrentPage}
+          setFilterPokemonListData={setFilterPokemonListData}
+          pokemonListData={pokemonListData}
+          setPokemonListData={setPokemonListData}
+        ></SearchBar>
+        <h2 className={style.searchAgain}>
+          Sorry, no results found. Please try again with different search
+          criteria or browse our other categories. Thank you!
+        </h2>
+        {/* <Reset
+          setFilter={setFilter}
+          setPokemonListData={setPokemonListData}
+          setCurrentPage={setCurrentPage}
+          setSearchTerm={setSearchTerm}
+          pokemonListData={pokemonListData}
+        ></Reset> */}
+      </div>
+    );
+  }
 
-      {!filter
-        ? currentPokemonListData.map((pokemon, index) => (
-            <PokemonCard key={index} pokemon={pokemon}></PokemonCard>
-          ))
-        : currentPokemonListData.map((pokemon, index) => (
-            <PokemonCard key={index} pokemon={pokemon}></PokemonCard>
-          ))}
-      <Paginado
+  return (
+    <div className={style.main}>
+      <SearchBar
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        filter={filter}
         currentPage={currentPage}
-        totalPages={Math.ceil(pokemonListData.length / itemsPerPage)}
-        onPageChange={handlePageChange}
-      />
-    </>
+        setFilter={setFilter}
+        setCurrentPage={setCurrentPage}
+        setFilterPokemonListData={setFilterPokemonListData}
+        pokemonListData={pokemonListData}
+        setPokemonListData={setPokemonListData}
+      ></SearchBar>
+      <div className={style.list}>
+        {!filter
+          ? currentPokemonListData.map((pokemon, index) => (
+              <PokemonCard
+                className={style.pokecard}
+                key={index}
+                pokemon={pokemon}
+              ></PokemonCard>
+            ))
+          : currentPokemonListData.map((pokemon, index) => (
+              <PokemonCard key={index} pokemon={pokemon}></PokemonCard>
+            ))}
+      </div>
+      <div className={style.paginado}>
+        <Paginado
+          currentPage={currentPage}
+          totalPages={
+            !filter
+              ? Math.ceil(pokemonListData.length / itemsPerPage)
+              : Math.ceil(filterPokemonListData.length / itemsPerPage)
+          }
+          onPageChange={handlePageChange}
+        />
+      </div>
+    </div>
   );
 }
 

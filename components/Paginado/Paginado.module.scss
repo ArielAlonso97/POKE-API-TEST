@@ -1,0 +1,35 @@
+.paginado {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+}
+
+.anterior {
+  padding: 10px 20px;
+  background: #c93739;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 25px 0px 0px 25px;
+  cursor: pointer;
+  width: 10vw;
+  transition: all 0.3s ease-in-out;
+    min-width: 130px;
+  box-shadow: 5px 5px 5px gray;
+}
+
+.siguiente {
+  padding: 10px 20px;
+  background: #c93739;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  border-radius: 0px 25px 25px 0px;
+  cursor: pointer;
+  width: 10vw;
+  min-width: 130px;
+  transition: all 0.3s ease-in-out;
+
+  box-shadow: 5px 5px 5px gray;
+}
