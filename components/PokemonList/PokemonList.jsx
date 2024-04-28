@@ -1,13 +1,16 @@
-'use client'
+"use client";
 
 // components/PokemonList.js
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchPokemonList, fetchPokemonUrl } from '../../redux/actions/pokemonAction';
-import { Provider } from 'react-redux';
-import store from '../../redux/store';
-import PokemonCard from '../PokemonCard/PokemonCard';
-import Paginado from '../Paginado/Paginado';
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  fetchPokemonList,
+  fetchPokemonUrl,
+} from "../../redux/actions/pokemonAction";
+import { Provider } from "react-redux";
+import store from "../../redux/store";
+import PokemonCard from "../PokemonCard/PokemonCard";
+import Paginado from "../Paginado/Paginado";
 
 function PokemonList() {
   const dispatch = useDispatch();
@@ -17,9 +20,19 @@ function PokemonList() {
   const [pokemonListData, setPokemonListData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const itemsPerPage = 6;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage+1
+
+  const currentPokemonListData = pokemonListData.slice(startIndex+1,endIndex); 
+ 
+
+
+
   useEffect(() => {
-    dispatch(fetchPokemonList());
-  }, [dispatch]);
+    dispatch(fetchPokemonList(itemsPerPage,startIndex));
+    console.log(pokemonList)
+  }, [dispatch, currentPage]);
 
   useEffect(() => {
     if (pokemonList.length > 0) {
@@ -27,7 +40,7 @@ function PokemonList() {
         dispatch(fetchPokemonUrl(pokemon.url));
       });
     }
-  }, [pokemonList, dispatch]);
+  }, [pokemonList, dispatch, currentPage]);
 
   useEffect(() => {
     const newPokemonListData = [...pokemonListData];
@@ -62,11 +75,6 @@ function PokemonList() {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  const itemsPerPage = 6; // Número de Pokémon a mostrar por página
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentPokemonListData = pokemonListData.slice(startIndex, endIndex);
 
   return (
     <>

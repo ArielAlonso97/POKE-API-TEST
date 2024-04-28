@@ -6,7 +6,7 @@ const Paginado = ({ currentPage, totalPages, onPageChange }) => {
       <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
         Anterior
       </button>
-      <span>{currentPage} de {totalPages}</span>
+      <span>{currentPage} {/* de {totalPages} */}</span>
       <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
         Siguiente
       </button>
