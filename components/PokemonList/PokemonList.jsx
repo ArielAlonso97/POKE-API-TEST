@@ -1,14 +1,13 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchPokemonList,
-  fetchPokemonUrl,
-} from "../../redux/actions/pokemonAction";
-import { Provider } from "react-redux";
-import store from "../../redux/store";
-import PokemonCard from "../PokemonCard/PokemonCard";
+'use client'
 
+// components/PokemonList.js
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchPokemonList, fetchPokemonUrl } from '../../redux/actions/pokemonAction';
+import { Provider } from 'react-redux';
+import store from '../../redux/store';
+import PokemonCard from '../PokemonCard/PokemonCard';
+import Paginado from '../Paginado/Paginado';
 
 function PokemonList() {
   const dispatch = useDispatch();
@@ -16,6 +15,7 @@ function PokemonList() {
   const pokemonListUrl = useSelector((state) => state.pokemon.pokemonListUrl);
   const error = useSelector((state) => state.pokemon.error);
   const [pokemonListData, setPokemonListData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     dispatch(fetchPokemonList());
@@ -55,15 +55,29 @@ function PokemonList() {
     setPokemonListData(newPokemonListData);
   }, [pokemonListUrl]);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
   if (error) {
     return <div>Error: {error}</div>;
   }
 
+  const itemsPerPage = 6; // Número de Pokémon a mostrar por página
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentPokemonListData = pokemonListData.slice(startIndex, endIndex);
+
   return (
     <>
-      {pokemonListData.map((pokemon, index) => (
+      {currentPokemonListData.map((pokemon, index) => (
         <PokemonCard key={index} pokemon={pokemon}></PokemonCard>
       ))}
+      <Paginado
+        currentPage={currentPage}
+        totalPages={Math.ceil(pokemonListData.length / itemsPerPage)}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 }

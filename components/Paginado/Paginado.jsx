@@ -1,24 +1,17 @@
-import React from 'react'
-import { useRouter } from 'next/router';
+import React from 'react';
 
-const Paginado = ({ currentPage, totalPages }) => {
-    const router = useRouter();
+const Paginado = ({ currentPage, totalPages, onPageChange }) => {
+  return (
+    <div>
+      <button onClick={() => onPageChange(currentPage - 1)} disabled={currentPage === 1}>
+        Anterior
+      </button>
+      <span>{currentPage} de {totalPages}</span>
+      <button onClick={() => onPageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+        Siguiente
+      </button>
+    </div>
+  );
+};
 
-    const goToPage = (page) => {
-      router.push(`/?page=${page}`);
-    };
-  
-    return (
-      <div>
-        <button disabled={currentPage === 1} onClick={() => goToPage(currentPage - 1)}>
-          Anterior
-        </button>
-        <span>Página {currentPage} de {totalPages}</span>
-        <button disabled={currentPage === totalPages} onClick={() => goToPage(currentPage + 1)}>
-          Siguiente
-        </button>
-      </div>
-    );
-}
-
-export default Paginado
+export default Paginado;
