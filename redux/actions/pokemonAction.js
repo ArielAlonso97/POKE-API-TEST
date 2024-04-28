@@ -1,4 +1,4 @@
-export const fetchPokemonListLimitOffset = (limit,offset) => async dispatch => {
+/* export const fetchPokemonListLimitOffset = (limit,offset) => async dispatch => {
     try {
       const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
       if (!response.ok) {
@@ -9,11 +9,11 @@ export const fetchPokemonListLimitOffset = (limit,offset) => async dispatch => {
     } catch (error) {
       dispatch(fetchPokemonFailureLimitOffset(error.message));
     }
-  };
+  }; */
 
-  export const fetchPokemonList = () => async dispatch => {
+  export const fetchPokemonList = (limit,offset) => async dispatch => {
     try {
-      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=1025&offset=0`);
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
       if (!response.ok) {
         throw new Error('Failed to fetch Pokémon');
       }

@@ -29,12 +29,17 @@ function PokemonList() {
  
  const currentPokemonListData = filter
   ? filterPokemonListData.slice(startIndex, endIndex)
-  : pokemonListData.slice(startIndex, endIndex);
+  : pokemonListData.slice(startIndex+1, endIndex);
 
+  const limit = filter
+  ? 1025
+  : itemsPerPage;
+
+  const offset = startIndex;
 
   useEffect(() => {
-    dispatch(fetchPokemonList());
-  }, [dispatch]);
+    dispatch(fetchPokemonList(limit,offset));
+  }, [dispatch,currentPage,filter]);
 
   useEffect(() => {
     if (pokemonList.length > 0) {
@@ -75,9 +80,12 @@ function PokemonList() {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
     console.log(searchTerm);
+    
   };
 
   const handleSearch = () => {
+    setFilter(true)
+    setCurrentPage(1)
     const filteredPokemonList = pokemonListData.filter((pokemon) => {
       let types = []; // Inicializamos types como un array para almacenar los tipos de Pokémon
       let id = 0;
