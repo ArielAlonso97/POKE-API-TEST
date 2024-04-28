@@ -1,6 +1,6 @@
-export const fetchPokemonList = () => async dispatch => {
+export const fetchPokemonList = (limit,offset) => async dispatch => {
     try {
-      const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=18&offset=0');
+      const response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
       if (!response.ok) {
         throw new Error('Failed to fetch Pokémon');
       }
