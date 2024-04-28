@@ -1,12 +1,8 @@
-"use client";
+'use client'
 
-// components/PokemonList.js
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchPokemonList,
-  fetchPokemonUrl,
-} from "../../redux/actions/pokemonAction";
+import { fetchPokemonList, fetchPokemonUrl } from "../../redux/actions/pokemonAction";
 import { Provider } from "react-redux";
 import store from "../../redux/store";
 import PokemonCard from "../PokemonCard/PokemonCard";
@@ -22,24 +18,25 @@ function PokemonList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Nuevo estado para controlar la carga
 
   const itemsPerPage = 6;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage + 1;
- 
- const currentPokemonListData = filter
-  ? filterPokemonListData.slice(startIndex, endIndex)
-  : pokemonListData.slice(startIndex+1, endIndex);
 
-  const limit = filter
-  ? 1025
-  : itemsPerPage;
+  const currentPokemonListData = filter
+    ? filterPokemonListData.slice(startIndex, endIndex)
+    : pokemonListData.slice(startIndex + 1, endIndex);
 
+  const limit = 1025;
   const offset = startIndex;
 
   useEffect(() => {
-    dispatch(fetchPokemonList(limit,offset));
-  }, [dispatch,currentPage,filter]);
+    setIsLoading(true); // Marcar como cargando al iniciar la carga de la lista
+    dispatch(fetchPokemonList(limit, offset))
+      .then(() => setIsLoading(false)) // Cuando la carga finaliza, marcar como no cargando
+      .catch(() => setIsLoading(false)); // Manejar errores también
+  }, [dispatch, filter]);
 
   useEffect(() => {
     if (pokemonList.length > 0) {
@@ -47,7 +44,7 @@ function PokemonList() {
         dispatch(fetchPokemonUrl(pokemon.url));
       });
     }
-  }, [pokemonList, dispatch, currentPage]);
+  }, [pokemonList, dispatch, filter]);
 
   useEffect(() => {
     const newPokemonListData = [...pokemonListData];
@@ -64,14 +61,12 @@ function PokemonList() {
       height: pokemonListUrl.height,
     };
 
-    if (
-      !newPokemonListData.some((pokemon) => pokemon.name === newDataToAdd.name)
-    ) {
+    if (!newPokemonListData.some((pokemon) => pokemon.name === newDataToAdd.name)) {
       newPokemonListData.push(newDataToAdd);
     }
 
     setPokemonListData(newPokemonListData);
-  }, [pokemonListUrl]);
+  }, [pokemonListUrl, filter]);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -79,30 +74,23 @@ function PokemonList() {
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
-    console.log(searchTerm);
-    
   };
 
   const handleSearch = () => {
-    setFilter(true)
-    setCurrentPage(1)
+    setFilter(true);
+    setCurrentPage(1);
     const filteredPokemonList = pokemonListData.filter((pokemon) => {
-      let types = []; // Inicializamos types como un array para almacenar los tipos de Pokémon
+      let types = [];
       let id = 0;
-  
-      // Verificar si pokemon.types existe y tiene al menos un elemento
+
       if (pokemon.types && pokemon.types.length > 0) {
-        // Almacenar los tipos en el array types
         types = pokemon.types.map((typeData) => typeData.type.name);
       }
-  
-      // Verificar si pokemon.id existe
+
       if (pokemon.id) {
         id = pokemon.id.toString();
-        console.log(id);
       }
-  
-      // Filtrar por nombre de Pokémon, tipos y ID
+
       return (
         types.some((type) => type.toLowerCase().includes(searchTerm.toLowerCase())) ||
         (pokemon &&
@@ -111,20 +99,19 @@ function PokemonList() {
         id.toString() === searchTerm.toString()
       );
     });
-  
-    setFilter(true);
     setFilterPokemonListData(filteredPokemonList);
-    console.log(filteredPokemonList);
-    console.log(filteredPokemonList.length);
   };
-  
 
   const handleReset = () => {
+    setPokemonListData(pokemonListData);
+    setCurrentPage(1);
+    setSearchTerm("");
     setFilter(false);
-    setPokemonListData(pokemonListData)
-    setCurrentPage(1)
-    setSearchTerm("")
   };
+
+  if (isLoading) {
+    return <div>Cargando...</div>;
+  }
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -139,7 +126,9 @@ function PokemonList() {
         onChange={handleSearchChange}
       />
       <button onClick={handleSearch}>Buscar</button>
-      {filter && <button onClick={handleReset}>Reset</button>}
+      {filter || currentPage>1 ? <button onClick={handleReset}>Reset</button>: null}
+      
+
       {!filter
         ? currentPokemonListData.map((pokemon, index) => (
             <PokemonCard key={index} pokemon={pokemon}></PokemonCard>

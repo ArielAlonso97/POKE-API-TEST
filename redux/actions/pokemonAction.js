@@ -20,7 +20,7 @@
       const data = await response.json();
       dispatch(fetchPokemonSuccess(data.results));
     } catch (error) {
-      dispatch(fetchPokemonFailure(error.message));
+      console.log(fetchPokemonFailure(error.message));
     }
   };
 
@@ -33,7 +33,7 @@
       const data = await response.json();
       dispatch(fetchPokemonSuccessUrl(data));
     } catch (error) {
-      dispatch(fetchPokemonFailureUrl(error.message));
+      console.log(fetchPokemonFailureUrl(error.message));
     }
   };
 
