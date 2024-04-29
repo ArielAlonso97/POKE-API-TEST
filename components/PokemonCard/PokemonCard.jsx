@@ -16,7 +16,7 @@ const PokemonCard = ({ pokemon }) => {
   return (
     <>
       {infoActive && (
-        <MoreInfor setInfoActive={setInfoActive} pokemon={pokemon}></MoreInfor>
+        <MoreInfor className={style.moreInfoContainer} setInfoActive={setInfoActive} pokemon={pokemon}></MoreInfor>
       )}
 
       {pokemon.abilities && (
