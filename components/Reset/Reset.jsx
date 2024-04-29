@@ -1,7 +1,7 @@
 import React from 'react'
 import style from './Reset.module.scss'
 
-const Reset = ({setPokemonListData, setCurrentPage, setSearchTerm, setFilter,pokemonListData}) => {
+const Reset = ({setPokemonListData, setCurrentPage, setSearchTerm, setFilter,pokemonListData, pokemonList}) => {
 
     const handleReset = () => {
         setPokemonListData(pokemonListData);

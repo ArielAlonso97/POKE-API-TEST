@@ -135,6 +135,7 @@ function PokemonList() {
         setFilterPokemonListData={setFilterPokemonListData}
         pokemonListData={pokemonListData}
         setPokemonListData={setPokemonListData}
+        pokemonList={pokemonList}
       ></SearchBar>
       <div className={style.list}>
         {!filter

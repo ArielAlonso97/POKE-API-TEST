@@ -97,6 +97,12 @@
 
 @media only screen and (max-width: 1160px) {
   .main {
-    min-height: 2300px;
+    min-height: 2350px;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .main {
+    min-height: 2650px;
   }
 }

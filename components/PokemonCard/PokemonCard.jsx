@@ -12,7 +12,14 @@ const PokemonCard = ({ pokemon }) => {
     setInfoActive(true);
     console.log(infoActive);
   }
+  const handleScrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll hacia arriba suavemente
+  };
 
+  const handleClick = (e) =>{
+    handleMoreInfo(e);
+    handleScrollToTop();
+  }
   return (
     <>
       {infoActive && (
@@ -35,7 +42,7 @@ const PokemonCard = ({ pokemon }) => {
             </div>
           </div>
           <div className={style.buttonContainer}>
-            <button className={style.button} onClick={handleMoreInfo}>
+            <button className={style.button} onClick={handleClick} >
               More Info
             </button>
           </div>
