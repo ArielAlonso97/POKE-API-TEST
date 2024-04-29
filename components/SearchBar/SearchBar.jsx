@@ -12,6 +12,7 @@ const SearchBar = ({
   pokemonListData,
   setSearchTerm,
   setPokemonListData,
+  pokemonList
 }) => {
   //seach texto
 
@@ -70,6 +71,7 @@ const SearchBar = ({
           setCurrentPage={setCurrentPage}
           setSearchTerm={setSearchTerm}
           pokemonListData={pokemonListData}
+          pokemonList={pokemonList}
         ></Reset>
       ) : null}
     </div>
